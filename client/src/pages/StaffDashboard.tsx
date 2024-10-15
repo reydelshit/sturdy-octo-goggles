@@ -58,6 +58,7 @@ import { toast } from '@/hooks/use-toast';
 import axios from 'axios';
 import DefaultProfile from '@/assets/default.jpg';
 import moment from 'moment';
+import { ExportToPDF } from '@/components/ExportPdf';
 
 // const patients = [
 //   {
@@ -391,6 +392,7 @@ const healthTrends = [
 
 export default function StaffDashboard() {
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [search, setSearch] = useState('');
   const [formData, setFormData] = useState({
     fullname: '',
     age: '',
@@ -672,20 +674,28 @@ export default function StaffDashboard() {
                   </DialogContent>
                 </Dialog>
 
-                <Button variant="secondary">
-                  <Activity className="mr-2 h-4 w-4" />
-                  Generate Reports
-                </Button>
+                <ExportToPDF data={patients || []} fileName="patients" />
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="mb-4 flex items-center space-x-2">
               <Search className="h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search patients..." className="w-[20rem]" />
+              <Input
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search patients..."
+                className="w-[20rem]"
+              />
             </div>
 
-            <DataTable columns={columns} data={patients || []} />
+            <DataTable
+              columns={columns}
+              data={
+                patients?.filter((pat) =>
+                  pat.fullname.toLowerCase().includes(search.toLowerCase()),
+                ) || []
+              }
+            />
           </CardContent>
         </Card>
 
