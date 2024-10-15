@@ -452,6 +452,8 @@ export default function StaffDashboard() {
 
   const handleLogout = () => {
     window.location.href = '/login';
+    localStorage.removeItem('patient_id');
+    localStorage.removeItem('health_monitoring_role');
   };
 
   const todayAppointments =
